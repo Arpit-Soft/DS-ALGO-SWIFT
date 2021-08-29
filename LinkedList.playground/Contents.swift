@@ -41,17 +41,21 @@ struct LinkedList<Value> {
     }
     
     mutating func push(_ value: Value) {
+        
         self.head = Node(value: value, nextNode: head)
+        
         if tail == nil {
             tail = head
         }
     }
     
     mutating func append(_ value: Value) {
+        
         if isEmpty {
             push(value)
             return
         }
+        
         let node = Node(value: value)
         tail?.nextNode = node
         tail = node
@@ -62,6 +66,7 @@ struct LinkedList<Value> {
     }
     
     mutating func pop() -> Value? {
+        
         defer {
             head = head?.nextNode
             if isEmpty {
@@ -73,6 +78,7 @@ struct LinkedList<Value> {
     }
     
     mutating func removeLast() -> Value? {
+        
         guard let head = head else {
             return nil
         }
@@ -91,6 +97,18 @@ struct LinkedList<Value> {
         prev.nextNode = nil
         tail = prev
         return current.value
+    }
+    
+    mutating func remove(after node: Node<Value>) -> Value? {
+        
+        defer {
+            if node.nextNode === tail {
+                tail = node
+            }
+            node.nextNode = node.nextNode?.nextNode
+        }
+        
+        return node.nextNode?.value
     }
     
     init() {}
@@ -116,6 +134,7 @@ linkedList1.append(15)
 linkedList1.append(25)
 linkedList1.append(35)
 linkedList1.append(100)
+linkedList1.append(200)
 //print(linkedList1)
 
 if let nodeAtIndex = linkedList1.node(at: 1) {
@@ -127,6 +146,13 @@ if let nodeAtIndex = linkedList1.node(at: 1) {
 linkedList1.pop()
 //print(linkedList1)
 
-print(linkedList1)
+//print(linkedList1)
 linkedList1.removeLast()
+//print(linkedList1)
+
 print(linkedList1)
+if let node = linkedList1.node(at: 1) {
+    let removedValue = linkedList1.remove(after: node)
+    print(removedValue)
+    print(linkedList1)
+}
