@@ -27,6 +27,19 @@ struct LinkedList<Value> {
         return tail == nil
     }
     
+    func node(at index: Int) -> Node<Value>? {
+        
+        var currentIndex = 0
+        var currentNode = head
+        
+        while currentNode != nil && currentIndex < index {
+            currentNode = currentNode?.nextNode
+            currentIndex += 1
+        }
+        
+        return currentNode
+    }
+    
     mutating func push(_ value: Value) {
         self.head = Node(value: value, nextNode: head)
         if tail == nil {
@@ -42,6 +55,10 @@ struct LinkedList<Value> {
         let node = Node(value: value)
         tail?.nextNode = node
         tail = node
+    }
+    
+    func insert(_ value: Value, after node: Node<Value>) {
+        node.nextNode = Node(value: value, nextNode: node.nextNode)
     }
     
     init() {}
@@ -66,4 +83,10 @@ var linkedList1 = LinkedList<Int>()
 linkedList1.append(15)
 linkedList1.append(25)
 linkedList1.append(35)
+linkedList1.append(100)
 print(linkedList1)
+
+if let nodeAtIndex = linkedList1.node(at: 1) {
+    linkedList1.insert(1, after: nodeAtIndex)
+    print(linkedList1)
+}
