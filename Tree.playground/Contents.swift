@@ -33,7 +33,7 @@ struct TreeNode <Type> {
     }
 }
 
-extension TreeNode {
+extension TreeNode where Type: Equatable {
     
     // Depth First Traversal
     func forEachDepthFirst(_ visit: (TreeNode) -> Void) {
@@ -52,6 +52,19 @@ extension TreeNode {
             visit(node)
             node.children.forEach { queue.enqueue($0) }
         }
+    }
+    
+    func search( value: Type) -> TreeNode? {
+        
+        var result: TreeNode?
+        
+        forEachLevelOrder { node in
+            if node.value == value {
+                result = node
+            }
+        }
+        
+        return result
     }
 }
 
@@ -98,7 +111,11 @@ beverages.forEachDepthFirst { (node) in
 }
 
 beverages.forEachLevelOrder { (node) in
-    print(node)
+    //print(node)
+}
+
+if let result = beverages.search(value: "Cold Drink") {
+    print(result)
 }
 
 /*
