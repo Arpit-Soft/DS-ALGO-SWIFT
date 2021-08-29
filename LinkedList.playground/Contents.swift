@@ -61,6 +61,17 @@ struct LinkedList<Value> {
         node.nextNode = Node(value: value, nextNode: node.nextNode)
     }
     
+    mutating func pop() -> Value? {
+        defer {
+            head = head?.nextNode
+            if isEmpty {
+                tail = nil
+            }
+        }
+        
+        return head?.value
+    }
+    
     init() {}
 }
 
@@ -77,16 +88,20 @@ var linkedList = LinkedList<Int>()
 linkedList.push(15)
 linkedList.push(25)
 linkedList.push(35)
-print(linkedList)
+//print(linkedList)
 
 var linkedList1 = LinkedList<Int>()
 linkedList1.append(15)
 linkedList1.append(25)
 linkedList1.append(35)
 linkedList1.append(100)
-print(linkedList1)
+//print(linkedList1)
 
 if let nodeAtIndex = linkedList1.node(at: 1) {
     linkedList1.insert(1, after: nodeAtIndex)
-    print(linkedList1)
+    //print(linkedList1)
 }
+
+print(linkedList1)
+linkedList1.pop()
+print(linkedList1)
