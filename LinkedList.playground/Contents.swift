@@ -72,6 +72,27 @@ struct LinkedList<Value> {
         return head?.value
     }
     
+    mutating func removeLast() -> Value? {
+        guard let head = head else {
+            return nil
+        }
+        
+        guard head.nextNode != nil else {
+            return pop()
+        }
+        
+        var prev = head
+        var current = head
+        while let next = current.nextNode  {
+            prev = current
+            current = next
+        }
+        
+        prev.nextNode = nil
+        tail = prev
+        return current.value
+    }
+    
     init() {}
 }
 
@@ -102,6 +123,10 @@ if let nodeAtIndex = linkedList1.node(at: 1) {
     //print(linkedList1)
 }
 
-print(linkedList1)
+//print(linkedList1)
 linkedList1.pop()
+//print(linkedList1)
+
+print(linkedList1)
+linkedList1.removeLast()
 print(linkedList1)
