@@ -1,5 +1,25 @@
 import UIKit
 
+struct Queue<Type> {
+    
+    var elements :[Type] = []
+    
+    @discardableResult
+    mutating func enqueue(_ value :Type) -> Bool {
+        elements.append(value)
+        return true
+    }
+    
+    var isEmpty :Bool {
+        return elements.isEmpty
+    }
+    
+    mutating func dequeue() -> Type? {
+        return isEmpty ? nil : elements.removeFirst()
+    }
+    
+}
+
 struct TreeNode <Type> {
     var value: Type
     var children = [TreeNode]()
@@ -15,10 +35,22 @@ struct TreeNode <Type> {
 
 extension TreeNode {
     
+    // Depth First Traversal
     func forEachDepthFirst(_ visit: (TreeNode) -> Void) {
         visit(self)
         children.forEach {
             $0.forEachDepthFirst(visit)
+        }
+    }
+    
+    // Level Order Traversal
+    func forEachLevelOrder(_ visit: (TreeNode) -> Void) {
+        visit(self)
+        var queue = Queue<TreeNode>()
+        children.forEach { queue.enqueue($0) }
+        while let node = queue.dequeue() {
+            visit(node)
+            node.children.forEach { queue.enqueue($0) }
         }
     }
 }
@@ -43,15 +75,29 @@ hot.add(coffee)
 var soda = TreeNode(value: "Soda")
 var milk = TreeNode(value: "Milk")
 
+var sprite = TreeNode(value: "Sprite")
+var lemonSoda = TreeNode(value: "Lemon Soda")
+
+soda.add(sprite)
+soda.add(lemonSoda)
+
+var shake = TreeNode(value: "Shake")
+var rabdi = TreeNode(value: "Rabdi")
+
+milk.add(shake)
+milk.add(rabdi)
+
 cold.add(soda)
 cold.add(milk)
 
 beverages.add(hot)
 beverages.add(cold)
 
-print(beverages)
-
 beverages.forEachDepthFirst { (node) in
+    //print(node)
+}
+
+beverages.forEachLevelOrder { (node) in
     print(node)
 }
 
@@ -60,6 +106,7 @@ beverages.forEachDepthFirst { (node) in
        Beverages
          /   \
         /     \
-  Hot Drink  Cold Drink
- 
+Hot Drink    Cold Drink
+    / \         / \
+  Tea Coffee  Soda Milk
  */
